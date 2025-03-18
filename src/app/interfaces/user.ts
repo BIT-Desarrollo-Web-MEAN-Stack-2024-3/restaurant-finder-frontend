@@ -6,6 +6,8 @@ export interface User {
     _id?: string;
     role?: string;
     userId?: string;
+    urlImage?: string;
+    state?: boolean;
     updatedAt?: string;
     createdAt?: string;
 }

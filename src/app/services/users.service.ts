@@ -19,6 +19,10 @@ export class UsersService {
   registerUser( newUser: User ) : Observable<Response<User>> {
     return this.http.post<Response<User>>( 'http://localhost:3000/api/users', newUser, { headers: this.getHeaders() } );
   }
+
+  getUsers() : Observable<Response<User[]>> {
+    return this.http.get<Response<User[]>>( 'http://localhost:3000/api/users', { headers: this.getHeaders() } );
+  }
 }
 
 

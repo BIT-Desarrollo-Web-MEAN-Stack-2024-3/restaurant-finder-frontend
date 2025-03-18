@@ -1,1 +1,50 @@
-<p>users works!</p>
+<h1>User list</h1>
+
+@if ( isLoading ) {
+  <div>Loading products...</div>
+} @else {
+    @if ( users.length === 0 ) {
+      <div class="no-data">There are no registered products.</div>
+    } @else {
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>User image</th>
+            <th>User name</th>
+            <th>Username</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- TODO: No listar al usuario actual -->
+          @for ( user of users; track user._id ) {
+            <tr>
+              <td>
+                @if ( ! user?.urlImage ) {
+                  <img src="assets/images/no-avatar-available.webp" class="image-avatar" alt="No image available" />
+                }
+                @else {
+                  <img [src]="user.urlImage" class="image-avatar" [alt]="user.name" />
+                }
+
+              </td>
+              <td>
+                <div class="name">{{ user.name }}</div>
+                <div class="state">{{ user.role }}</div>
+              </td>
+              <td>
+                <div class="category">{{ user.username || 'No category'  }}</div>
+                <div class="state">{{ user.state ? 'Available' : 'Not available' }}</div>
+              </td>
+              <td>
+                <div class="actions">
+                  <a [routerLink]="'/dashboard/user/edit/' + (user._id ?? '')" class="btn btn-primary">Edit</a>
+                  <button class="btn btn-warning">Delete</button>
+                </div>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    }
+}
