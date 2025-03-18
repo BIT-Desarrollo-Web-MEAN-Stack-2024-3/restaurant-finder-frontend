@@ -29,7 +29,11 @@ export class UsersService {
   }
 
   getUserById( id: string ) : Observable<Response<User>> {
-    return this.http.get<Response<User>>( `http://localhost:3000/api/users/${ id }` );
+    return this.http.get<Response<User>>( `http://localhost:3000/api/users/${ id }`, { headers: this.getHeaders() } );
+  }
+
+  updateUserById( id: string, updatedUser: any ) {
+    return this.http.patch( `http://localhost:3000/api/users/${ id }`, updatedUser, { headers: this.getHeaders() } )
   }
 }
 

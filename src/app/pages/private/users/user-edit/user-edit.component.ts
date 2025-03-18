@@ -2,6 +2,9 @@ import { JsonPipe } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Params } from '@angular/router';
+import { UsersService } from '../../../../services/users.service';
+import { Response } from '../../../../interfaces/response';
+import { User } from '../../../../interfaces/user';
 
 @Component({
   selector: 'app-user-edit',
@@ -16,13 +19,14 @@ export class UserEditComponent {
   userId!: string;
 
   constructor(
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private usersService: UsersService
   ) {
     // Agrupacion de campos del formulario
     this.formData = new FormGroup({
       name: new FormControl( '' , [ Validators.required ] ),
       username: new FormControl( '', [ Validators.required, Validators.email ] ),
-      password: new FormControl( '', [ Validators.required, Validators.minLength( 6 ), Validators.maxLength( 12 ) ] ),
+      // password: new FormControl( '', [ Validators.required, Validators.minLength( 6 ), Validators.maxLength( 12 ) ] ),
       role: new FormControl( '', [ Validators.required ] ),
       state: new FormControl( true, [ Validators.required ] )
     });
@@ -30,6 +34,7 @@ export class UserEditComponent {
 
   ngOnInit() {
     this.getRouteId();
+    this.loadFormData( this.userId );
   }
 
   private getRouteId () {
@@ -38,6 +43,30 @@ export class UserEditComponent {
       console.log('ID del usuario:', this.userId );
     });
   }
+
+  private loadFormData( categoryId: string ) {
+      if ( categoryId ) {
+
+        this.usersService.getUserById( categoryId ).subscribe({
+          next: ( data: Response<User> ) => {
+            console.log( data );
+
+            // Establece nuevos valores para el formulario
+            this.formData.patchValue({
+              name: data?.data?.name,
+              username: data?.data?.username,
+              password: data?.data?.password,
+              role: data?.data?.role,
+              state: data?.data?.state,
+              // TODO: userId guarda el usuario que lo creó. Validar crear un atributo para saber el userId de quien lo modificó
+            });
+          },
+          error: (error) => {
+            console.error( error );
+          }
+        });
+      }
+    }
 
   onSubmit() {
     // Obtiene los valores de los campos campos del formulario
