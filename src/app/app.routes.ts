@@ -28,7 +28,7 @@ export const routes: Routes = [
     { path: 'dashboard/products', component: ProductsComponent, canActivate: [ authGuard ] },
     { path: 'dashboard/categories', component: CategoriesComponent, canActivate: [ authGuard ] },
     { path: 'dashboard/user/new', component: UserRegisterComponent, canActivate: [ authGuard ] },
-    { path: 'dashboard/user/edit', component: UserEditComponent, canActivate: [ authGuard ] },
+    { path: 'dashboard/user/edit/:id', component: UserEditComponent, canActivate: [ authGuard ] },
     { path: 'dashboard/product/new', component: ProductRegisterComponent, canActivate: [ authGuard ] },
     { path: 'dashboard/product/edit/:id', component: ProductEditComponent, canActivate: [ authGuard ] },
     { path: 'dashboard/category/new', component: CategoryRegisterComponent, canActivate: [ authGuard ] },
