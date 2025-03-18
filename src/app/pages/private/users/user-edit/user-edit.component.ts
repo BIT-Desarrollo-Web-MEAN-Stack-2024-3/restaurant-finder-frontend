@@ -1,6 +1,7 @@
 import { JsonPipe } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { ActivatedRoute, Params } from '@angular/router';
 
 @Component({
   selector: 'app-user-edit',
@@ -12,8 +13,11 @@ export class UserEditComponent {
   /** Atributos */
   formData!: FormGroup;
   roles: String[] = ['registered', 'moderator', 'admin' ];
+  userId!: string;
 
-  constructor() {
+  constructor(
+    private route: ActivatedRoute
+  ) {
     // Agrupacion de campos del formulario
     this.formData = new FormGroup({
       name: new FormControl( '' , [ Validators.required ] ),
@@ -21,6 +25,17 @@ export class UserEditComponent {
       password: new FormControl( '', [ Validators.required, Validators.minLength( 6 ), Validators.maxLength( 12 ) ] ),
       role: new FormControl( '', [ Validators.required ] ),
       state: new FormControl( true, [ Validators.required ] )
+    });
+  }
+
+  ngOnInit() {
+    this.getRouteId();
+  }
+
+  private getRouteId () {
+    this.route.paramMap.subscribe( ( params: Params ) => {
+      this.userId = params[ 'get' ]( 'id' ) ?? '';
+      console.log('ID del usuario:', this.userId );
     });
   }
 
