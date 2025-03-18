@@ -1,6 +1,8 @@
 import { JsonPipe } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { UsersService } from '../../../../services/users.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-user-register',
@@ -13,7 +15,10 @@ export class UserRegisterComponent {
   formData!: FormGroup;
   roles: String[] = ['registered', 'moderator', 'admin' ];
 
-  constructor() {
+  constructor(
+    private usersService: UsersService,
+    private router: Router
+  ) {
     // Agrupacion de campos del formulario
     this.formData = new FormGroup({
       name: new FormControl( '' , [ Validators.required ] ),
@@ -31,6 +36,21 @@ export class UserRegisterComponent {
     // Verifica el estado de validacion del formulario
     if( this.formData.valid ) {
       console.log( inputData );   // Enviar los datos al BackEnd
+
+      this.usersService.registerUser( inputData ).subscribe({
+        next: ( data ) => {
+          console.log( data );
+          console.log( 'User registered successfuly' );
+
+          this.router.navigate([ 'dashboard','users' ]);
+        },
+        error: ( error ) => {
+          console.error( error );
+        },
+        complete: () => {
+          this.formData.reset();
+        }
+      });
     }
 
     this.formData.reset();    // Limpia los campos del formulario

@@ -5,6 +5,7 @@ export interface User {
     password?: string;
     _id?: string;
     role?: string;
+    userId?: string;
     updatedAt?: string;
     createdAt?: string;
 }
