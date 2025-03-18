@@ -106,8 +106,8 @@ export class ProductEditComponent {
           // this.router.navigateByUrl( 'dashboard/products' );
           this.router.navigate([ 'dashboard','products' ]);
         },
-        error: ( errors ) => {
-          console.log( errors );
+        error: ( error ) => {
+          console.log( error );
         },
         complete: () => {
           this.formData.reset();

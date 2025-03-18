@@ -1,7 +1,7 @@
 import { JsonPipe } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { ActivatedRoute, Params } from '@angular/router';
+import { ActivatedRoute, Params, Router } from '@angular/router';
 import { UsersService } from '../../../../services/users.service';
 import { Response } from '../../../../interfaces/response';
 import { User } from '../../../../interfaces/user';
@@ -20,7 +20,8 @@ export class UserEditComponent {
 
   constructor(
     private route: ActivatedRoute,
-    private usersService: UsersService
+    private usersService: UsersService,
+    private router: Router
   ) {
     // Agrupacion de campos del formulario
     this.formData = new FormGroup({
@@ -75,8 +76,22 @@ export class UserEditComponent {
     // Verifica el estado de validacion del formulario
     if( this.formData.valid ) {
       console.log( inputData );   // Enviar los datos al BackEnd
-    }
 
-    this.formData.reset();    // Limpia los campos del formulario
+      // Usar el servicio para conectar con el backend y enviar los valores capturados por el formulario
+      this.usersService.updateUserById( this.userId, inputData ).subscribe({
+        next: ( data ) => {
+          console.log( data );
+          console.log( 'Update users successfully' );
+
+          this.router.navigate([ 'dashboard','users' ]);
+        },
+        error: ( error ) => {
+          console.log( error );
+        },
+        complete: () => {
+          this.formData.reset();    // Limpia los campos del formulario
+        }
+      });
+    }
   }
 }
