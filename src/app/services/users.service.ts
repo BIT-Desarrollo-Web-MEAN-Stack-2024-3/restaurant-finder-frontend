@@ -23,6 +23,10 @@ export class UsersService {
   getUsers() : Observable<Response<User[]>> {
     return this.http.get<Response<User[]>>( 'http://localhost:3000/api/users', { headers: this.getHeaders() } );
   }
+
+  deleteUserById( id: string ) : Observable<Response<User>> {
+    return this.http.delete<Response<User>>( `http://localhost:3000/api/users/${ id }`, { headers: this.getHeaders() } );
+  }
 }
 
 

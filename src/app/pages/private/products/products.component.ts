@@ -33,7 +33,6 @@ export class ProductsComponent {
     });
   }
 
-
   onRemove( productId : string ) {
 
     if( ! productId ) {

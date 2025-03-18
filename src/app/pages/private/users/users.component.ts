@@ -29,7 +29,8 @@ export class UsersComponent {
         console.log( data );
         console.log( 'Successfully obtains users' );
 
-        this.users = data.data ?? [];    // Asignara una lista vacia para evitar asignar undefined
+        // Eliminar el usuario autenticado de la lista & Asignara una lista vacia para evitar asignar undefined
+        this.users = data.data?.filter( userItem => userItem._id !== this.user._id ) ?? [];
       },
       error: ( error ) => {
         console.error( error );
@@ -38,6 +39,27 @@ export class UsersComponent {
       complete: () => {
         this.isLoading = false;               // También lo actualiza cuando la petición es exitosa
       }
+    });
+  }
+
+  onRemove( userId : string ) {
+
+    if( ! userId ) {
+      console.error( 'Invalid user ID' );
+      return;
+    }
+
+    this.usersService.deleteUserById( userId ).subscribe({
+      next: ( data ) => {
+        console.log( data );
+        console.log( 'Delete user successfully' );
+
+        this.ngOnInit();    // Actualiza datos
+      },
+      error: ( error ) => {
+        console.error( error );
+      },
+      complete: () => {},
     });
   }
 }
